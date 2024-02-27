@@ -3,17 +3,46 @@ var gamePattern = [];
 
 var userClickedPattern = [];
 
+var level = 0;
+
+$(document).keypress(function () {
+  if (!started) {
+    $("started-level").text("level" + level);
+    nextSequence();
+    started = true;
+  }
+});
+
 $(".btn").click(function () {
   var userChosenColor = $(this).attr("id");
 
   userClickedPattern.push(userChosenColor);
 
-  console.log(userClickedPattern);
+  //console.log(userClickedPattern);
 
   playSound(userChosenColor);
+
+  checkAnswer(userClickedPattern.length - 1);
 });
 
+function checkAnswer(currentLevel) {
+  if (gamePattern[currentLevel] === userClickedPattern[currentLevel])
+    console.log("success");
+
+  if (userClickedPattern.length === gamePattern.length) {
+    setTimeout(function () {
+      nextSequence();
+    }, 1000);
+  } else {
+    console.log("wrong");
+  }
+}
+
 function nextSequence() {
+  increase++;
+
+  $("$level-title").text("level" + level);
+
   var randomNumber = Math.floor(Math.random() * 4);
   var randomChosenColor = buttonColors[randomNumber];
 
@@ -33,10 +62,9 @@ function playSound(name) {
 }
 
 function animatePress(currentColor) {
-  $("#" + currentColor).addClass("pressed")
+  $("#" + currentColor).addClass("pressed");
 
-  setTimeout(function() {
-    $("#" + currentColor).removeClass("pressed")
-  },100)
-
+  setTimeout(function () {
+    $("#" + currentColor).removeClass("pressed");
+  }, 100);
 }
